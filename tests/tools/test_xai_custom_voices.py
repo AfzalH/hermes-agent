@@ -402,3 +402,32 @@ class TestHeaders:
 
         assert h["Authorization"] == "Bearer test-key"
         assert h["User-Agent"] == "Hermes-Agent/1.0"
+
+
+# ---------------------------------------------------------------------------
+# list_builtin_voices
+# ---------------------------------------------------------------------------
+
+
+class TestListBuiltinVoices:
+    def test_successful_list(self, set_api_key):
+        from tools.xai_custom_voices import list_builtin_voices
+
+        mock_response = MagicMock()
+        mock_response.json.return_value = {
+            "voices": [
+                {"voice_id": "eve", "name": "Eve", "language": "multilingual"},
+                {"voice_id": "leo", "name": "Leo", "language": "multilingual"},
+            ]
+        }
+        mock_response.raise_for_status = MagicMock()
+
+        with patch("requests.get", return_value=mock_response) as mock_get:
+            result = list_builtin_voices()
+
+        assert len(result["voices"]) == 2
+        assert result["voices"][0]["voice_id"] == "eve"
+        # Verify it hits /tts/voices not /custom-voices
+        call_url = mock_get.call_args[0][0]
+        assert "/tts/voices" in call_url
+        assert "/custom-voices" not in call_url

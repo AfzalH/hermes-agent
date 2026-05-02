@@ -27,6 +27,7 @@ Usage::
         update_custom_voice,
         delete_custom_voice,
         download_custom_voice_audio,
+        list_builtin_voices,
     )
 """
 
@@ -383,3 +384,24 @@ def download_custom_voice_audio(voice_id: str, output_path: str) -> str:
 
     logger.info("Downloaded reference audio for voice %s to %s", voice_id, output_path)
     return str(output)
+
+
+def list_builtin_voices() -> Dict[str, Any]:
+    """List all built-in xAI TTS voices.
+
+    Returns:
+        API response dict with voice list. Each voice has voice_id, name,
+        language, gender, accent, age, use_case, and description fields.
+    """
+    import requests
+
+    api_key = _get_api_key()
+    base_url = _get_base_url()
+
+    response = requests.get(
+        f"{base_url}/tts/voices",
+        headers=_headers(api_key),
+        timeout=30,
+    )
+    response.raise_for_status()
+    return response.json()
