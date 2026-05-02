@@ -830,7 +830,7 @@ DEFAULT_CONFIG = {
             # Voices: alloy, echo, fable, onyx, nova, shimmer
         },
         "xai": {
-            "voice_id": "eve",
+            "voice_id": "eve",  # Built-in voice or custom voice ID from https://console.x.ai/team/default/voice/voice-library
             "language": "en",
             "sample_rate": 24000,
             "bit_rate": 128000,

@@ -69,7 +69,9 @@ tts:
     model: "gemini-2.5-flash-preview-tts"  # or gemini-2.5-pro-preview-tts
     voice: "Kore"               # 30 prebuilt voices: Zephyr, Puck, Kore, Enceladus, Gacrux, etc.
   xai:
-    voice_id: "eve"             # xAI TTS voice (see https://docs.x.ai/docs/api-reference#tts)
+    voice_id: "eve"             # Built-in voice (eve, leo, ara, rex, sal, etc.) or custom voice ID
+    # Custom voices: clone your voice at https://console.x.ai/team/default/voice/voice-library
+    # then paste the 8-character voice_id here (e.g. "nlbqfwie")
     language: "en"              # ISO 639-1 code
     sample_rate: 24000          # 22050 / 24000 (default) / 44100 / 48000
     bit_rate: 128000            # MP3 bitrate; only applies when codec=mp3
@@ -126,6 +128,35 @@ Without ffmpeg, Edge TTS, MiniMax TTS, NeuTTS, KittenTTS, and Piper audio are se
 :::tip
 If you want voice bubbles without installing ffmpeg, switch to the OpenAI, ElevenLabs, or Mistral provider.
 :::
+
+### xAI Custom Voices (voice cloning)
+
+xAI lets you clone your own voice from a short recording (30–120 seconds) and use it with TTS. Custom voices work anywhere a built-in xAI voice works.
+
+**Setup:**
+
+1. Go to the [xAI Console Voice Library](https://console.x.ai/team/default/voice/voice-library)
+2. Record ~60–120s of natural speech (the console guides you through verification)
+3. Copy the 8-character `voice_id` from the voice card's three-dot menu
+4. Set it in your config:
+
+```yaml
+tts:
+  provider: xai
+  xai:
+    voice_id: "nlbqfwie"   # your custom voice ID
+    language: "en"
+```
+
+**Tips for good clones:**
+- Use a quiet room with a quality microphone
+- Speak naturally — scripted-sounding recordings produce scripted voices
+- 90–120 seconds gives best results (under 30s may lack detail)
+- Match your recording style to how you want the voice used (conversational, narration, etc.)
+
+**Limits:** Up to 30 custom voices per team. Currently US-only (excluding Illinois). Custom voices are private to your team.
+
+**Programmatic management** (Enterprise-only): The `tools.xai_custom_voices` module provides Python functions for listing, creating, updating, and deleting custom voices via the API.
 
 ### Piper (local, 44 languages)
 
